@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Educational Instagram Login Replica</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fafafa;
+      --card:#fff;
+      --border:#dbdbdb;
+      --text:#262626;
+      --muted:#8e8e8e;
+      --link:#00376b;
+      --btn:#0095f6;
+      --btn-disabled:#b2dffc;
+      --divider:#8e8e8e;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    /* Layout similar to Instagram desktop login: phone mock + form column */
+    .page{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 0;
+    }
+    .wrap{
+      width:100%;
+      max-width:935px; /* IG desktop container width */
+      display:flex;
+      gap:32px;
+      align-items:center;
+      justify-content:center;
+      padding:0 16px;
+    }
+    /* Left column: phone mock image (hidden on small screens) */
+    .phone{
+      display:none;
+      position:relative;
+      width:380px;
+      height:580px;
+      background:#000;
+      border-radius:40px;
+      overflow:hidden;
+      box-shadow:0 20px 40px rgba(0,0,0,.12);
+    }
+    .phone img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      opacity:.9;
+    }
+
+    /* Right column: login card + signup card + get app row */
+    .stack{
+      width:100%;
+      max-width:350px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      padding:40px 40px 28px;
+    }
+    .card.logo-pad{ padding: 36px 40px 28px; }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:26px;
+      height:50px;
+    }
+    /* Placeholder “wordmark-style” SVG so we don’t use real brand asset */
+    .brand svg{
+      height:38px;
+      fill:#111;
+    }
+
+    .field{
+      margin-bottom:6px;
+    }
+    input{
+      width:100%;
+      border:1px solid var(--border);
+      background:#fafafa;
+      border-radius:4px;
+      padding:10px 12px;
+      outline:none;
+      font-size:14px;
+    }
+    input:focus{
+      border-color:#a1a1a1;
+      background:#fff;
+    }
+
+    .login-btn{
+      margin-top:10px;
+      width:100%;
+      border:none;
+      border-radius:8px;
+      padding:8px 12px;
+      color:#fff;
+      font-weight:600;
+      background:var(--btn);
+      cursor:pointer;
+    }
+    .login-btn:disabled{
+      background:var(--btn-disabled);
+      cursor:not-allowed;
+    }
+
+    .or{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      margin:16px 0 10px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.4px;
+    }
+    .or .line{
+      height:1px;
+      flex:1;
+      background:var(--border);
+    }
+
+    .fb-login{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      color:#385185;
+      font-weight:600;
+      background:none;
+      border:none;
+      cursor:pointer;
+      padding:6px 0;
+      font-size:14px;
+    }
+    .fb-icon{
+      width:16px;
+      height:16px;
+      background:#385185;
+      color:#fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:2px;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .forgot{
+      margin-top:12px;
+      text-align:center;
+    }
+    .forgot a{
+      color:var(--link);
+      font-size:12px;
+      text-decoration:none;
+    }
+
+    .signup{
+      background:var(--card);
+      border:1px solid var(--border);
+      padding:22px 0;
+      text-align:center;
+      font-size:14px;
+    }
+    .signup a{
+      color:#0095f6;
+      text-decoration:none;
+      font-weight:600;
+      margin-left:4px;
+    }
+
+    .get-app{
+      text-align:center;
+      margin-top:10px;
+    }
+    .get-app p{
+      font-size:14px;
+      margin:10px 0;
+      color:var(--text);
+    }
+    .badges{
+      display:flex;
+      gap:8px;
+      justify-content:center;
+    }
+    .badge{
+      width:136px;
+      height:40px;
+      background:#000;
+      border-radius:6px;
+    }
+    .badge--light{
+      background:#1c1c1c;
+    }
+
+    /* Footer (simple) */
+    .footer{
+      margin-top:24px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      padding:0 16px;
+    }
+    .footer .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px 16px;
+      justify-content:center;
+      margin-bottom:8px;
+    }
+
+    /* Responsive */
+    @media (min-width: 875px){
+      .phone{ display:block; }
+    }
+    @media (max-width: 380px){
+      .card{ padding: 30px 22px 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="wrap">
+
+      <!-- Left: phone mock image -->
+      <div class="phone" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop" alt="Phone preview" />
+      </div>
+
+      <!-- Right: stack -->
+      <div class="stack">
+        <!-- Login card -->
+        <div class="card logo-pad">
+          <div class="brand" aria-label="Educational wordmark">
+            <!-- Simple placeholder wordmark SVG (not the real Instagram asset) -->
+            <svg viewBox="0 0 300 64" role="img" aria-label="EduGram">
+              <text x="0" y="45" font-size="44" font-weight="700" font-family="Inter, Arial">EduGram</text>
+
+            </svg>
+          </div>
+
+          <form id="loginForm" aria-label="Login form" novalidate>
+            <div class="field">
+              <input id="username" name="username" type="text" placeholder="Phone number, username, or email" required autocomplete="username" />
+            </div>
+            <div class="field">
+              <input id="password" name="password" type="password" placeholder="Password" required autocomplete="current-password" />
+            </div>
+            <button class="login-btn" id="loginBtn" type="submit" disabled>Log in</button>
+
+            <div class="or" aria-hidden="true">
+              <div class="line"></div>
+              <div>or</div>
+              <div class="line"></div>
+            </div>
+
+            <button type="button" class="fb-login" aria-label="Log in with Facebook">
+              <span class="fb-icon">f</span>
+              <span>Log in with Facebook</span>
+            </button>
+
+            <div class="forgot">
+              <a href="#" aria-label="Forgot password">Forgot password?</a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Signup card -->
+        <div class="signup" role="complementary" aria-label="Sign up">
+          Don't have an account?
+          <a href="#" aria-label="Sign up">Sign up</a>
+        </div>
+
+        <!-- Get the app -->
+        <div class="get-app" aria-label="Get the app">
+          <p>Get the app.</p>
+          <div class="badges" aria-hidden="true">
+            <div class="badge"></div>
+            <div class="badge badge--light"></div>
+          </div>
+        </div>
+
+        <!-- Footer (simplified) -->
+        <div class="footer" role="contentinfo">
+          <div class="row">
+            <span>About</span>
+            <span>Help</span>
+            <span>Press</span>
+            <span>API</span>
+            <span>Jobs</span>
+            <span>Privacy</span>
+            <span>Terms</span>
+            <span>Locations</span>
+          </div>
+          <div class="row">
+            <span>English (UK)</span>
+            <span>© 2025 EduGram</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const usernameEl = document.getElementById('username');
+    const passwordEl = document.getElementById('password');
+
+    function validate() {
+      const u = usernameEl.value.trim();
+      const p = passwordEl.value.trim();
+      loginBtn.disabled = !(u.length > 0 && p.length >= 6);
+    }
+    usernameEl.addEventListener('input', validate);
+    passwordEl.addEventListener('input', validate);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = usernameEl.value.trim();
+      const password = passwordEl.value;
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+
+      try {
+        const res = await fetch('http://localhost:3000/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        alert(data?.message || 'Submitted.');
+      } catch (err) {
+        alert('Error submitting form.');
+      } finally {
+        loginBtn.textContent = 'Log in';
+        validate();
+      }
+    });
+  </script>
+</body>
+</html>
